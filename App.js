@@ -40,17 +40,18 @@ const styles = StyleSheet.create({
   },
   day:{
     flex: 1,
-    alignItems:"center",
-    
-    
+    alignItems:"center", 
   },
   temp:{
+    color:"#6868AC",
     fontSize: 128,
-    fontWeight:"300",
+    fontWeight:"200",
   },
   description:{
+    color:"#6868AC",
     marginTop: -10,
     fontSize: 28,
+    fontWeight:"300",
     
   },
 
