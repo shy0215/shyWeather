@@ -1,13 +1,33 @@
+import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView,Dimensions } from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function App() {
+  const [city, setCity] = useState("Loading...")
+  const [location, setLocation] = useState();
+  const [ok, setOk] = useState(true);
+  const ask = async() => {
+    const {granted} = await Location.requestForegroundPermissionsAsync();
+    if(!granted){
+      setOk(false);
+    }
+    const {coords:{latitude, longitude}} = await Location.getCurrentPositionAsync({accuracy:5});
+    const location = await Location.reverseGeocodeAsync(
+      {latitude, longitude},
+      {useGoogleMaps:false}
+    );
+    setCity(location[0].city);
+  };
+  useEffect(() => {
+    ask();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.city}>
-        <Text style={styles.cityName}>Ulsan</Text>
+        <Text style={styles.cityName}>{city}</Text>
       </View>
       <ScrollView 
         pagingEnabled
@@ -57,6 +77,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   cityName:{
+    marginTop: 10,
     color:"#6868AC",
     fontSize: 32,
     fontWeight:"400",
@@ -75,7 +96,7 @@ const styles = StyleSheet.create({
   },
   description:{
     color:"#6868AC",
-    marginTop: -10,
+    marginTop: -5,
     fontSize: 28,
     fontWeight:"300",
     
